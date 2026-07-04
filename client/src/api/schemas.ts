@@ -13,7 +13,7 @@ import { z } from "zod";
 
 export const loginSchema = z.object({
   email: z.email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
+  password: z.string().min(6, "Password lenght must be greater that 6 character"),
 });
 export type LoginInput = z.infer<typeof loginSchema>;
 
@@ -73,3 +73,54 @@ export const userSchema = userSummarySchema.extend({
   createdAt: z.string(),
 });
 export type User = z.infer<typeof userSchema>;
+
+// ---------------------------------------------------------------------------
+// Course shapes (BE-3 / BE-4)
+// ---------------------------------------------------------------------------
+
+/** Shared by `course.poster` and `lecture.video`. */
+export const assetSchema = z.object({
+  publicId: z.string().min(1),
+  url: z.url(),
+});
+export type Asset = z.infer<typeof assetSchema>;
+
+/** One item in GET /api/v1/courses → { courses: CourseCard[] }. */
+export const courseCardSchema = z.object({
+  id: z.string(),
+  title: z.string().min(5).max(50),
+  description: z.string().min(5),
+  category: z.string(), // free-form, NOT an enum
+  createdBy: z.string(), // admin display name
+  price: z.number().min(0), // INR rupees; 0 = free
+  poster: assetSchema,
+  numberOfVideos: z.number().int().min(0),
+  views: z.number().int().min(0),
+});
+export type CourseCard = z.infer<typeof courseCardSchema>;
+
+/** One item in GET /api/v1/courses/:id → { lectures: Lecture[] }. */
+export const lectureSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  video: assetSchema,
+});
+export type Lecture = z.infer<typeof lectureSchema>;
+
+// Response envelopes
+export const courseListSchema = z.object({
+  success: z.literal(true),
+  courses: z.array(courseCardSchema),
+});
+export const courseLecturesSchema = z.object({
+  success: z.literal(true),
+  lectures: z.array(lectureSchema),
+});
+
+// Query params for the filter bar
+export const courseFilterSchema = z.object({
+  keyword: z.string().optional(),
+  category: z.string().optional(),
+});
+export type CourseFilter = z.infer<typeof courseFilterSchema>;

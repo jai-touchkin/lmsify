@@ -5,6 +5,8 @@ import { HomePage } from "@/pages/HomePage";
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
 import { ProfilePage } from "@/pages/ProfilePage";
+import { CoursesPage } from "@/pages/CoursesPage";
+import { CourseDetailPage } from "@/pages/CourseDetailPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 
 /**
@@ -12,8 +14,11 @@ import { NotFoundPage } from "@/pages/NotFoundPage";
  * visible content while the session is being restored. Public routes are
  * reachable without a session; only /auth/profile is behind <ProtectedRoute>.
  *
- * The route order matters: put `/auth/*` before `*` so the catch-all 404
- * doesn't shadow them.
+ * The course detail route is public too — its internal paywall handles
+ * auth + purchase gating.
+ *
+ * Route order matters: put the `*` catch-all LAST so it doesn't shadow the
+ * `/courses/:id` dynamic segment.
  */
 export const router = createBrowserRouter([
   {
@@ -26,6 +31,8 @@ export const router = createBrowserRouter([
       { path: ROUTES.HOME, element: <HomePage /> },
       { path: ROUTES.LOGIN, element: <LoginPage /> },
       { path: ROUTES.REGISTER, element: <RegisterPage /> },
+      { path: ROUTES.COURSES, element: <CoursesPage /> },
+      { path: ROUTES.COURSE_DETAIL, element: <CourseDetailPage /> },
       {
         path: ROUTES.PROFILE,
         element: (

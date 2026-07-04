@@ -12,6 +12,7 @@ export const ENDPOINTS = {
   logout: "/auth/logout",
   me: "/auth/me",
   updateProfile: "/user/updateprofile",
+  courses: "/courses",
 } as const;
 
 export const ROUTES = {
@@ -19,5 +20,10 @@ export const ROUTES = {
   LOGIN: "/auth/login",
   REGISTER: "/auth/register",
   PROFILE: "/auth/profile",
+  COURSES: "/courses",
+  COURSE_DETAIL: "/courses/:id", // router pattern, not for <Link>
   NOT_FOUND: "*",
 } as const;
+
+/** Build the path used in `<Link to={...}>` for a course detail page. */
+export const courseDetailPath = (id: string) => `/courses/${id}`;
