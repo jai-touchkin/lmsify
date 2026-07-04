@@ -1,7 +1,7 @@
 {
-  "name": "coursehub-api",
+  "name": "lmsify-api",
   "version": "2.0.0",
-  "description": "CourseHub LMS API — Express + TypeScript + MongoDB + R2 + Redis",
+  "description": "Lmsify LMS API — Express + TypeScript + MongoDB + R2 + Redis",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",

@@ -1,4 +1,4 @@
-# CourseHub — Frontend (FE-1)
+# Lmsify — Frontend (FE-1)
 
 Vite 6 + React 19 + TypeScript (strict) + Tailwind v4 + shadcn/ui.
 Scaffold only — no features yet.

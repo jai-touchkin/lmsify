@@ -1,2 +1,0 @@
-# Keep this directory tracked even when empty.
-# FE-2 will add Zod schemas copied from server/src/schemas/.

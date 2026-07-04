@@ -1,11 +1,24 @@
 import { create } from "zustand";
-import type { User } from "@/types/user";
+import type { User, UserSummary } from "@/api/schemas";
+
+/**
+ * What we have in the store after login vs. after `/me`:
+ *  - `setSession` is called with the summary returned by /login + /register.
+ *  - `setUser` is called with the full `toClient` shape from /me + /updateprofile.
+ *  - `useMe` upgrades the summary to the full shape on first successful fetch.
+ *
+ * The public type is `User | null` because callers (HomePage, ProfileForm)
+ * already access fields that exist on both shapes (name, email, role) and
+ * the few extra fields (purchasedCourses, playlist) are only read on the
+ * profile page after /me has populated them.
+ */
+type SessionUser = User | UserSummary;
 
 interface AuthState {
   accessToken: string | null;
-  user: User | null;
+  user: SessionUser | null;
   isAuthenticated: boolean;
-  setSession: (accessToken: string, user: User) => void;
+  setSession: (accessToken: string, user: UserSummary) => void;
   setAccessToken: (accessToken: string) => void;
   setUser: (user: User) => void;
   clear: () => void;

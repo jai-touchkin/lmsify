@@ -66,7 +66,7 @@ app.use(
 // --- Root ping (no auth, always available) ---
 app.get("/", (_req, res) => {
   res.send(
-    `<h1>CourseHub API is running. <a href="${env.FRONTEND_URL}">Open frontend</a>.</h1>`,
+    `<h1>Lmsify API is running. <a href="${env.FRONTEND_URL}">Open frontend</a>.</h1>`,
   );
 });
 

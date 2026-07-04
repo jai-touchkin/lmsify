@@ -1,7 +1,9 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "@/stores/authStore";
+import { ENDPOINTS } from "@/api/endpoints";
 
-const API_BASE_URL = "http://localhost:4000/api/v1";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ?? "http://localhost:4000/api/v1";
 
 /* ------------------------------------------------------------------ *
  * Refresh-token queue
@@ -58,7 +60,7 @@ api.interceptors.response.use(
       !originalRequest ||
       error.response?.status !== 401 ||
       originalRequest._retry ||
-      originalRequest.url?.endsWith("/auth/refresh")
+      originalRequest.url?.endsWith(ENDPOINTS.refresh)
     ) {
       return Promise.reject(error);
     }
@@ -82,7 +84,7 @@ api.interceptors.response.use(
       // already prevents recursion, but going through the bare client is the
       // second line of defense if a future refactor removes the guard.
       const { data } = await axios.post<{ success: true; accessToken: string }>(
-        `${API_BASE_URL}/auth/refresh`,
+        `${API_BASE_URL}${ENDPOINTS.refresh}`,
         {},
         { withCredentials: true },
       );
@@ -96,10 +98,13 @@ api.interceptors.response.use(
     } catch (refreshError) {
       processQueue(refreshError, null);
       useAuthStore.getState().clear();
-      // Interceptor runs outside React's render cycle, so we can't safely call
-      // useNavigate() here. Full-page nav is fine for a hard logout. FE-2
-      // replaces this with a softer redirect from inside a React effect.
-      window.location.href = "/login";
+      // Do NOT call `window.location.href` here. The interceptor runs outside
+      // React's render cycle, and a full-page reload would re-mount
+      // <AuthBootstrap>, which fires `/me` again, which 401s again, which
+      // re-runs this catch — infinite redirect loop. Instead, let the
+      // request reject; React Query will settle the /me query as an error
+      // and <AuthBootstrap> will unmount its loader. <ProtectedRoute>, if
+      // the user is on a protected page, will <Navigate> to /auth/login.
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;

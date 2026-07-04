@@ -6,7 +6,7 @@ import { toClient } from "../utils/toClient.js";
 import type { UpdateProfileBody } from "../schemas/user.schema.js";
 
 /**
- * PUT /api/v1/updateprofile   (behind isAuthenticated)
+ * PUT /api/v1/user/updateprofile   (behind isAuthenticated)
  *
  * Updates name and/or email on the currently authenticated user. Returns the
  * full user shape (via `toClient`) so the frontend can refresh its cached

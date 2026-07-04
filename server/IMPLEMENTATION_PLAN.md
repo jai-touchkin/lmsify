@@ -1,4 +1,4 @@
-# CourseHub — TypeScript Implemetation Plan (Express + Node + MongoDB + R2 + Redis)
+# Lmsify — TypeScript Implemetation Plan (Express + Node + MongoDB + R2 + Redis)
 
 ---
 
@@ -54,7 +54,7 @@
 | HTTP framework | **Express 5** | Matches existing skillset; the existing app is already Express |
 | Database | **MongoDB** via **Mongoose 9** | Existing data lives here; no migration needed |
 | File storage | **Cloudflare R2** via **AWS SDK v3 (`@aws-sdk/client-s3`)** | R2 is S3-compatible — drop-in for `cloudinary` |
-| Cache / rate limit | **Redis** via **ioredis** | `coursehub-cache` for `GET /courses` list, `GET /courses/:id` |
+| Cache / rate limit | **Redis** via **ioredis** | `lmsify-cache` for `GET /courses` list, `GET /courses/:id` |
 | Auth | `jsonwebtoken` (HS256, 15d) + bcrypt (10 rounds) | Same as today |
 | File upload | `multer` (memory storage) → R2 stream | No base64; just `PutObjectCommand` with `Body: file.buffer` |
 | Validation | **Zod 4** + `express` adapter | Type-safe request bodies |
@@ -134,7 +134,7 @@ PORT=4000
 FRONTEND_URL=http://localhost:5173
 
 # Mongo
-MONGO_URI=mongodb://localhost:27017/coursehub
+MONGO_URI=mongodb://localhost:27017/lmsify
 
 # Redis
 REDIS_URL=redis://localhost:6379
@@ -151,7 +151,7 @@ REFRESH_TOKEN_TTL_DAYS=30     # refresh token lifetime in days
 R2_ACCOUNT_ID=
 R2_ACCESS_KEY_ID=
 R2_SECRET_ACCESS_KEY=
-R2_BUCKET=coursehub-media
+R2_BUCKET=lmsify-media
 R2_PUBLIC_URL=https://pub-XXXX.r2.dev       # or custom domain
 
 # Razorpay (Orders API for one-time per-course payments)
@@ -1201,7 +1201,7 @@ router.put ("/changepassword", isAuthenticated, validate(changePasswordSchema), 
 ```ts
 router.get   ("/me",                    isAuthenticated,                                  getMyProfile);
 router.delete("/me",                    isAuthenticated,                                  deleteAccount);
-router.put   ("/updateprofile",         isAuthenticated, validate(updateProfileSchema),   updateProfile);
+router.put   ("/user/updateprofile",         isAuthenticated, validate(updateProfileSchema),   updateProfile);
 router.put   ("/updateprofilepicture",  isAuthenticated, singleUpload,                   updateProfilePicture);
 router.post  ("/addtoplaylist",         isAuthenticated, validate(addToPlaylistSchema),   addToPlaylist);
 router.delete("/removefromplaylist",    isAuthenticated, validate(removeFromPlaylistQuerySchema, "query"), removeFromPlaylist);

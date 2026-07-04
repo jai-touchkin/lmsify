@@ -1,5 +1,8 @@
-import { toast } from "sonner";
-import { Sparkles, Wand2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Sparkles } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useLogout } from "@/features/auth";
+import { ROUTES } from "@/api/endpoints";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,78 +13,84 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
-import { useAuthStore } from "@/stores/authStore";
-import { useUiStore } from "@/stores/uiStore";
+import { Loader2, LogOut, LogIn, UserPlus } from "lucide-react";
 
-/**
- * FE-1 placeholder. Proves the design system is wired (Card, Button,
- * Separator, sonner toasts), the theme toggle works, and both stores
- * (auth + UI) are reachable. Replaced by real pages in FE-2+.
- *
- * `Wand2` is used in place of `Github` because lucide-react v1+ removed
- * all brand icons. Wand2 is a generic, brand-free substitute.
- */
 export function HomePage() {
-  const user = useAuthStore((s) => s.user);
-  const toggleSidebar = useUiStore((s) => s.toggleSidebar);
+  const { user, isAuthenticated } = useAuth();
+  const logout = useLogout();
 
   return (
-    <main className="bg-background text-foreground min-h-screen p-8">
-      <header className="mb-8 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+    <main className="bg-background text-foreground min-h-screen">
+      <header className="flex items-center justify-between p-6">
+        <div className="flex items-center gap-2 font-semibold">
           <Sparkles className="text-primary h-5 w-5" />
-          <h1 className="text-xl font-semibold">CourseHub</h1>
+          Lmsify
         </div>
-        <ThemeToggle />
+        <nav className="flex items-center gap-2">
+          {isAuthenticated ? (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link to={ROUTES.PROFILE}>
+                  {user?.name ?? "Profile"}
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => logout.mutate(undefined)}
+                disabled={logout.isPending}
+              >
+                {logout.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <LogOut className="h-4 w-4" />
+                )}
+                Sign out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link to={ROUTES.LOGIN}>
+                  <LogIn className="h-4 w-4" />
+                  Sign in
+                </Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link to={ROUTES.REGISTER}>
+                  <UserPlus className="h-4 w-4" />
+                  Sign up
+                </Link>
+              </Button>
+            </>
+          )}
+          <ThemeToggle />
+        </nav>
       </header>
 
-      <Separator className="my-6" />
+      <Separator />
 
-      <Card className="mx-auto max-w-xl">
-        <CardHeader>
-          <CardTitle>Frontend scaffold complete</CardTitle>
-          <CardDescription>
-            FE-1: Vite 6 + React 19 + Tailwind v4 + shadcn/ui. No features
-            yet.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-muted-foreground text-sm">
-            Logged in as:{" "}
-            <span className="text-foreground font-medium">
-              {user?.name ?? "Anonymous"}
-            </span>
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant="default"
-              onClick={() => toast.success("sonner is wired up")}
-            >
-              Trigger a toast
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => {
-                toggleSidebar();
-                toast.info("Sidebar toggled (uiStore wired)");
-              }}
-            >
-              Toggle sidebar
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() =>
-                toast("Welcome to CourseHub", {
-                  description: "FE-1 scaffold",
-                })
-              }
-            >
-              <Wand2 className="mr-2 h-4 w-4" />
-              Show another toast
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <section className="mx-auto max-w-xl px-4 py-12">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {isAuthenticated
+                ? `Welcome back, ${user?.name ?? "friend"}`
+                : "Learn anything, one course at a time"}
+            </CardTitle>
+            <CardDescription>
+              {isAuthenticated
+                ? "You're signed in. Browse courses, manage your playlist, and pick up where you left off."
+                : "Sign in to enroll in courses, track your progress, and build your playlist."}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground text-sm">
+              Course browse and player arrive in FE-3.
+            </p>
+          </CardContent>
+        </Card>
+      </section>
     </main>
   );
 }
