@@ -27,7 +27,6 @@ import {
   PlayCircle,
   Search,
 } from "lucide-react";
-import { toast } from "sonner";
 
 import { api } from "@/api/client";
 import { ENDPOINTS, ROUTES, courseDetailPath } from "@/api/endpoints";
@@ -39,6 +38,7 @@ import {
 } from "@/api/schemas";
 import { useAuth } from "@/hooks/useAuth";
 import { useDebounce } from "@/hooks/useDebounce";
+import { CheckoutButton } from "@/features/payments";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -437,12 +437,6 @@ export function LectureList({ lectures }: { lectures: Lecture[] }) {
 
 export function PaywallCard({ courseId }: { courseId: string }) {
   const { isAuthenticated } = useAuth();
-  const next = encodeURIComponent(courseDetailPath(courseId));
-
-  const handleBuy = () => {
-    // Placeholder — real Razorpay checkout arrives in FE-4.
-    toast.info("Checkout arrives in FE-4");
-  };
 
   return (
     <Card>
@@ -458,16 +452,7 @@ export function PaywallCard({ courseId }: { courseId: string }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {isAuthenticated ? (
-          <Button onClick={handleBuy}>
-            <IndianRupee className="h-4 w-4" />
-            Buy now
-          </Button>
-        ) : (
-          <Button asChild>
-            <Link to={`${ROUTES.LOGIN}?next=${next}`}>Sign in to enroll</Link>
-          </Button>
-        )}
+        <CheckoutButton courseId={courseId} />
       </CardContent>
     </Card>
   );

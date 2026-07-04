@@ -124,3 +124,39 @@ export const courseFilterSchema = z.object({
   category: z.string().optional(),
 });
 export type CourseFilter = z.infer<typeof courseFilterSchema>;
+
+// ---------------------------------------------------------------------------
+// Payment shapes (FE-4)
+// ---------------------------------------------------------------------------
+
+/** POST /payment/create-order — success case */
+export const createOrderResponseSchema = z.object({
+  success: z.literal(true),
+  orderId: z.string(),
+  amount: z.number(),
+  currency: z.string(),
+  key: z.string(),
+  course: z.object({
+    id: z.string(),
+    title: z.string(),
+    price: z.number(),
+  }),
+});
+export type CreateOrderResponse = z.infer<typeof createOrderResponseSchema>;
+
+/** POST /payment/create-order — already paid case */
+export const createOrderAlreadyPaidSchema = z.object({
+  success: z.literal(true),
+  message: z.string(),
+  alreadyPaid: z.literal(true),
+  courseId: z.string(),
+});
+export type CreateOrderAlreadyPaid = z.infer<typeof createOrderAlreadyPaidSchema>;
+
+/** POST /payment/verify */
+export const verifyPaymentResponseSchema = z.object({
+  success: z.literal(true),
+  reference: z.string(), // razorpay_payment_id
+  courseId: z.string(),
+});
+export type VerifyPaymentResponse = z.infer<typeof verifyPaymentResponseSchema>;

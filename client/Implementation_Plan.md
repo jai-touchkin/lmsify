@@ -503,30 +503,7 @@ v4 is configured in `src/index.css`).
   - Handle payment verification callbacks
   - Implement receipt display
 
-### FE-5: User Dashboard (Playlist/Progress)
-**Status:** 🚧 Pending
-
-- **Objective:** Implement user dashboard with playlist and progress tracking
-- **Key Deliverables:**
-  - User dashboard layout
-  - Playlist management
-  - Course progress tracking
-  - Watch history
-  - User statistics
-  - Dashboard API layer
-  - Dashboard components
-  - Progress visualization
-
-- **Implementation Details:**
-  - Create dashboard API functions
-  - Build dashboard layout components
-  - Implement playlist management UI
-  - Add progress tracking components
-  - Create watch history display
-  - Add user statistics widgets
-  - Implement data visualization components
-
-### FE-6: Admin Panel (Course/User Management)
+### FE-5: Admin Panel (Course/User Management)
 **Status:** 🚧 Pending
 
 - **Objective:** Implement admin dashboard for course and user management
@@ -551,7 +528,7 @@ v4 is configured in `src/index.css`).
   - Create useAdminAccess hook for permission checking
   - Add admin types in `src/features/admin/types/adminTypes.ts`
 
-### FE-7: Polish & Deployment (Error Handling/SEO/Performance)
+### FE-6: Polish & Deployment (Error Handling/SEO/Performance)
 **Status:** 🚧 Pending
 
 - **Objective:** Polish the application and prepare for production deployment

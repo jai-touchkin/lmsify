@@ -13,6 +13,8 @@ export const ENDPOINTS = {
   me: "/auth/me",
   updateProfile: "/user/updateprofile",
   courses: "/courses",
+  paymentCreateOrder: "/payment/create-order",
+  paymentVerify: "/payment/verify",
 } as const;
 
 export const ROUTES = {
@@ -22,6 +24,7 @@ export const ROUTES = {
   PROFILE: "/auth/profile",
   COURSES: "/courses",
   COURSE_DETAIL: "/courses/:id", // router pattern, not for <Link>
+  PAYMENT_SUCCESS: "/payment/success",
   NOT_FOUND: "*",
 } as const;
 

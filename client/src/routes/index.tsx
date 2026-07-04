@@ -7,6 +7,7 @@ import { RegisterPage } from "@/pages/RegisterPage";
 import { ProfilePage } from "@/pages/ProfilePage";
 import { CoursesPage } from "@/pages/CoursesPage";
 import { CourseDetailPage } from "@/pages/CourseDetailPage";
+import { PaymentSuccessPage } from "@/pages/PaymentSuccessPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 
 /**
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
       { path: ROUTES.REGISTER, element: <RegisterPage /> },
       { path: ROUTES.COURSES, element: <CoursesPage /> },
       { path: ROUTES.COURSE_DETAIL, element: <CourseDetailPage /> },
+      { path: ROUTES.PAYMENT_SUCCESS, element: <PaymentSuccessPage /> },
       {
         path: ROUTES.PROFILE,
         element: (

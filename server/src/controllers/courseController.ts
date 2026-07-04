@@ -76,7 +76,6 @@ export async function getCourses(req: Request, res: Response): Promise<void> {
       { category: { $regex: cleanKeyword, $options: "i" } },
     ];
   }
-  logger.debug({ filter, cleanKeyword, cleanCategory }, "getCourses filter");
 
   // Apply the standalone `category` filter AFTER the keyword filter so a
   // request like `?keyword=react&category=web` matches courses whose
