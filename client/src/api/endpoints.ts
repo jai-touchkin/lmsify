@@ -24,9 +24,14 @@ export const ROUTES = {
   PROFILE: "/auth/profile",
   COURSES: "/courses",
   COURSE_DETAIL: "/courses/:id", // router pattern, not for <Link>
+  LECTURE_PLAYER: "/courses/:id/lectures/:lectureId", // router pattern
   PAYMENT_SUCCESS: "/payment/success",
   NOT_FOUND: "*",
 } as const;
 
 /** Build the path used in `<Link to={...}>` for a course detail page. */
 export const courseDetailPath = (id: string) => `/courses/${id}`;
+
+/** Build the path used in `<Link to={...}>` for the lecture player page. */
+export const lecturePlayerPath = (courseId: string, lectureId: string) =>
+  `/courses/${courseId}/lectures/${lectureId}`;
