@@ -1,14 +1,15 @@
-import { Loader2 } from "lucide-react";
+import { LogoMark } from "@/components/brand/Logo";
 
 /**
- * Full-viewport spinner for route transitions and async loaders. Use
- * this from `<Suspense fallback>` in FE-2+ and from any `useQuery`
- * with `isPending`.
+ * Full-viewport loader shown while the session is being restored on boot.
+ * Deliberately quiet — it's on screen for a fraction of a second, and a
+ * spinner that flashes in and out reads as jitter.
  */
 export function PageLoader() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <Loader2 className="text-muted-foreground h-10 w-10 animate-spin" />
+    <div className="bg-background flex min-h-screen items-center justify-center">
+      <LogoMark className="text-primary size-8 animate-pulse" />
+      <span className="sr-only">Loading</span>
     </div>
   );
 }

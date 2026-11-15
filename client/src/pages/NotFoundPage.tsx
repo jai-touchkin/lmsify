@@ -1,34 +1,42 @@
 import { Link } from "react-router-dom";
-import { Home } from "lucide-react";
+
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { ROUTES } from "@/api/endpoints";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Logo } from "@/components/brand/Logo";
 
+/**
+ * The catch-all sits outside the layout routes, so it carries its own
+ * minimal chrome — a wordmark to get back out and nothing else.
+ */
 export function NotFoundPage() {
+  useDocumentTitle("Page not found");
+
   return (
-    <main className="bg-background text-foreground flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full max-w-sm text-center">
-        <CardHeader>
-          <CardTitle className="text-4xl">404</CardTitle>
-          <CardDescription>
-            We couldn't find that page.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+    <div className="flex min-h-screen flex-col">
+      <div className="p-6">
+        <Logo />
+      </div>
+
+      <main className="flex flex-1 flex-col items-center justify-center px-4 pb-24 text-center">
+        <p className="text-muted-foreground font-mono text-sm tracking-[0.18em]">
+          404
+        </p>
+        <h1 className="font-display mt-4 text-3xl font-semibold text-balance sm:text-4xl">
+          This page isn't here
+        </h1>
+        <p className="text-muted-foreground mt-3 max-w-sm text-pretty">
+          The link may be out of date, or the course it pointed at was removed.
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button asChild>
-            <Link to={ROUTES.HOME}>
-              <Home className="h-4 w-4" />
-              Back home
-            </Link>
+            <Link to={ROUTES.COURSES}>Browse courses</Link>
           </Button>
-        </CardContent>
-      </Card>
-    </main>
+          <Button asChild variant="outline">
+            <Link to={ROUTES.HOME}>Back home</Link>
+          </Button>
+        </div>
+      </main>
+    </div>
   );
 }

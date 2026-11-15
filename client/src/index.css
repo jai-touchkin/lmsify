@@ -11,64 +11,214 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ------------------------------------------------------------------ *
- * Design tokens
+ * Design tokens — "Reading room"
  * ------------------------------------------------------------------ *
- * `shadcn new-york` zinc palette, defined as CSS variables so the
- * Tailwind utilities `bg-background`, `text-foreground`, `bg-card`, etc.
- * resolve correctly. Light theme first; `.dark` below overrides.
+ * Warm academic: carbon ink on warm paper, ink-blue for actions, and a
+ * marigold highlighter as the single accent. Names follow the shadcn
+ * contract so every existing `bg-card` / `text-muted-foreground` class
+ * keeps working — only the values changed.
+ *
+ * Tailwind v4 note: tokens are `--color-*` (NOT the v3 `--background`
+ * form). The `.dark` block below overrides the same custom properties;
+ * utilities compile to `var(--color-…)`, so the override wins on source
+ * order at equal specificity.
  */
 @theme {
-  --color-background: hsl(0 0% 100%);
-  --color-foreground: hsl(240 10% 3.9%);
-  --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(240 10% 3.9%);
-  --color-popover: hsl(0 0% 100%);
-  --color-popover-foreground: hsl(240 10% 3.9%);
-  --color-primary: hsl(240 5.9% 10%);
-  --color-primary-foreground: hsl(0 0% 98%);
-  --color-secondary: hsl(240 4.8% 95.9%);
-  --color-secondary-foreground: hsl(240 5.9% 10%);
-  --color-muted: hsl(240 4.8% 95.9%);
-  --color-muted-foreground: hsl(240 3.8% 46.1%);
-  --color-accent: hsl(240 4.8% 95.9%);
-  --color-accent-foreground: hsl(240 5.9% 10%);
-  --color-destructive: hsl(0 84.2% 60.2%);
-  --color-destructive-foreground: hsl(0 0% 98%);
-  --color-border: hsl(240 5.9% 90%);
-  --color-input: hsl(240 5.9% 90%);
-  --color-ring: hsl(240 5.9% 10%);
-  --radius: 0.5rem;
+  /* Surfaces */
+  --color-background: #f6f2e9; /* warm paper */
+  --color-foreground: #1c1b18; /* carbon ink */
+  --color-card: #fdfbf6;
+  --color-card-foreground: #1c1b18;
+  --color-popover: #fdfbf6;
+  --color-popover-foreground: #1c1b18;
+
+  /* Actions */
+  --color-primary: #2b4c7e; /* ink blue */
+  --color-primary-foreground: #fdfbf6;
+  --color-secondary: #ece5d7;
+  --color-secondary-foreground: #33302a;
+  --color-muted: #ece5d7;
+  --color-muted-foreground: #6e6a5f; /* marginalia */
+  --color-accent: #e6dfcf;
+  --color-accent-foreground: #1c1b18;
+  --color-destructive: #a33a2a; /* brick, not siren red */
+  --color-destructive-foreground: #fdfbf6;
+
+  /* Signature — used for the hero sweep, enrolled state, progress. */
+  --color-highlight: #d99a2b; /* marigold */
+  --color-highlight-foreground: #1c1b18;
+  --color-success: #3f6b4a;
+  --color-success-foreground: #fdfbf6;
+
+  /* Lines */
+  --color-border: #ddd6c7;
+  --color-input: #ddd6c7;
+  --color-ring: #2b4c7e;
+
+  --radius: 0.375rem;
+
+  /* ---------------------------------------------------------------- *
+   * Type — three roles, three faces
+   * ---------------------------------------------------------------- *
+   * Literata is a reading serif (it was drawn for long-form book text),
+   * which is the right register for a study platform. Plex Sans carries
+   * the UI, Plex Mono carries data only: prices, counts, references.
+   */
+  --font-display:
+    "Literata", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-sans:
+    "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Shadows warmed to brown so they read as paper, not screen. */
+  --shadow-2xs: 0 1px 1px 0 rgb(60 46 20 / 0.04);
+  --shadow-xs: 0 1px 2px 0 rgb(60 46 20 / 0.06);
+  --shadow-sm: 0 1px 3px 0 rgb(60 46 20 / 0.08), 0 1px 2px -1px rgb(60 46 20 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(60 46 20 / 0.1);
+  --shadow-lg: 0 12px 28px -8px rgb(60 46 20 / 0.14);
+  --shadow-xl: 0 24px 48px -12px rgb(60 46 20 / 0.18);
 }
 
 .dark {
-  --color-background: hsl(240 10% 3.9%);
-  --color-foreground: hsl(0 0% 98%);
-  --color-card: hsl(240 10% 3.9%);
-  --color-card-foreground: hsl(0 0% 98%);
-  --color-popover: hsl(240 10% 3.9%);
-  --color-popover-foreground: hsl(0 0% 98%);
-  --color-primary: hsl(0 0% 98%);
-  --color-primary-foreground: hsl(240 5.9% 10%);
-  --color-secondary: hsl(240 3.7% 15.9%);
-  --color-secondary-foreground: hsl(0 0% 98%);
-  --color-muted: hsl(240 3.7% 15.9%);
-  --color-muted-foreground: hsl(240 5% 64.9%);
-  --color-accent: hsl(240 3.7% 15.9%);
-  --color-accent-foreground: hsl(0 0% 98%);
-  --color-destructive: hsl(0 62.8% 30.6%);
-  --color-destructive-foreground: hsl(0 0% 98%);
-  --color-border: hsl(240 3.7% 15.9%);
-  --color-input: hsl(240 3.7% 15.9%);
-  --color-ring: hsl(240 4.9% 83.9%);
+  --color-background: #14130f; /* warm near-black */
+  --color-foreground: #ede7da;
+  --color-card: #1c1a15;
+  --color-card-foreground: #ede7da;
+  --color-popover: #1c1a15;
+  --color-popover-foreground: #ede7da;
+
+  /* Brand stays blue in the dark theme rather than inverting to white —
+     stock shadcn flips `primary` to near-white, which erases the brand. */
+  --color-primary: #4a72b8;
+  --color-primary-foreground: #f5f1e8;
+  --color-secondary: #262319;
+  --color-secondary-foreground: #ede7da;
+  --color-muted: #262319;
+  --color-muted-foreground: #a19b8c;
+  --color-accent: #2f2b21;
+  --color-accent-foreground: #ede7da;
+  --color-destructive: #c2553f;
+  --color-destructive-foreground: #14130f;
+
+  --color-highlight: #e0a93c;
+  --color-highlight-foreground: #14130f;
+  --color-success: #6f9c78;
+  --color-success-foreground: #14130f;
+
+  --color-border: #2e2b24;
+  --color-input: #2e2b24;
+  --color-ring: #6f92cf;
+
+  --shadow-2xs: 0 1px 1px 0 rgb(0 0 0 / 0.3);
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.55);
+  --shadow-lg: 0 12px 28px -8px rgb(0 0 0 / 0.6);
+  --shadow-xl: 0 24px 48px -12px rgb(0 0 0 / 0.7);
 }
 
 @layer base {
   * {
     border-color: var(--color-border);
   }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Long-form text and headings get the reading serif. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-highlight) 45%, transparent);
+    color: var(--color-foreground);
+  }
+
+  /* `<details>`-based FAQ: hide the native disclosure triangle so the
+     custom chevron is the only marker. */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary {
+    list-style: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Signature — the highlighter sweep
+ * ------------------------------------------------------------------ *
+ * A marker stroke drawn behind a phrase, the way a student marks up a
+ * textbook. `preserveAspectRatio="none"` stretches the wobble to the
+ * width of whatever it wraps. Multiply blending keeps the ink on top
+ * legible instead of washing it out.
+ */
+.hl-sweep {
+  stroke: var(--color-highlight);
+  stroke-width: 26;
+  stroke-linecap: round;
+  fill: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: hl-draw 900ms cubic-bezier(0.65, 0, 0.35, 1) 250ms forwards;
+}
+
+/* On the dark canvas `multiply` would black the mark out, and `screen`
+   desaturates it to olive. Plain compositing at a lower alpha keeps it gold
+   while leaving the cream text legible on top. */
+.dark .hl-sweep {
+  mix-blend-mode: normal;
+  opacity: 0.42;
+}
+
+@keyframes hl-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Reduced motion: keep the mark, drop the drawing. */
+@media (prefers-reduced-motion: reduce) {
+  .hl-sweep {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Vidstack player theming
+ * ------------------------------------------------------------------ *
+ * The default video layout ships its own palette; point its accent at
+ * the brand so the scrubber and focus states match the rest of the app.
+ */
+.vds-video-layout {
+  --video-brand: var(--color-highlight);
+  --video-font-family: var(--font-sans);
+  --media-slider-track-fill-bg: var(--color-highlight);
+  --media-menu-bg: var(--color-card);
+  --media-menu-text: var(--color-card-foreground);
 }

@@ -13,6 +13,10 @@ function key(lectureId: string) {
   return `${PREFIX}progress:${lectureId}`;
 }
 
+function lastLectureKey(courseId: string) {
+  return `${PREFIX}last:${courseId}`;
+}
+
 export function getProgress(lectureId: string): number | null {
   try {
     const raw = localStorage.getItem(key(lectureId));
@@ -38,5 +42,26 @@ export function clearProgress(lectureId: string): void {
     localStorage.removeItem(key(lectureId));
   } catch {
     // ignore
+  }
+}
+
+/**
+ * The lecture the user last opened in a course. Powers the "Resume" button on
+ * My Learning and on the course sidebar, so a returning student lands on the
+ * lecture they were watching rather than lecture 1.
+ */
+export function getLastLecture(courseId: string): string | null {
+  try {
+    return localStorage.getItem(lastLectureKey(courseId));
+  } catch {
+    return null;
+  }
+}
+
+export function setLastLecture(courseId: string, lectureId: string): void {
+  try {
+    localStorage.setItem(lastLectureKey(courseId), lectureId);
+  } catch {
+    // quota / private mode — Resume just falls back to the first lecture.
   }
 }

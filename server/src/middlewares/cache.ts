@@ -11,8 +11,7 @@ import { cache } from "../services/cacheService.js";
  * Cache write failures are intentionally swallowed — a slow Redis must not
  * 500 a successful response.
  */
-export const cacheMiddleware =
-  (keyBuilder: (req: Request) => string, ttlSeconds: number) =>
+export const cacheMiddleware = (keyBuilder: (req: Request) => string, ttlSeconds: number) =>
   async (req: Request, res: Response, next: NextFunction) => {
     const key = `cache:${keyBuilder(req)}`;
 

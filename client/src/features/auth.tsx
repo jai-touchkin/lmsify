@@ -47,13 +47,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { PageLoader } from "@/components/common/PageLoader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -193,11 +186,15 @@ export function useUpdateProfile() {
  */
 export function AuthBootstrap({ children }: { children: ReactNode }) {
   const { isLoading, data } = useMe();
-  const { user, setUser } = useAuth();
+  const { setUser } = useAuth();
 
+  // Sync on every change to `data`, not just when the store is empty. A
+  // purchase invalidates `/me`, and the refetched user carries the new
+  // `purchasedCourses` — gating on `!user` would drop that update and leave
+  // the student staring at the paywall for a course they just bought.
   useEffect(() => {
-    if (data && !user) setUser(data);
-  }, [data, user, setUser]);
+    if (data) setUser(data);
+  }, [data, setUser]);
 
   if (isLoading) return <PageLoader />;
   return <>{children}</>;
@@ -607,16 +604,22 @@ export function ProfileForm() {
 
       <Separator />
 
-      <div>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium">Session</p>
+          <p className="text-muted-foreground text-sm">
+            Signing out ends this session on this device only.
+          </p>
+        </div>
         <Button
           variant="outline"
           onClick={onSignOut}
           disabled={logout.isPending}
         >
           {logout.isPending ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="size-4 animate-spin" />
           ) : (
-            <LogOut className="h-4 w-4" />
+            <LogOut className="size-4" />
           )}
           Sign out
         </Button>
@@ -638,13 +641,15 @@ export function AuthCard({
   description: string;
   children: ReactNode;
 }) {
+  // No card chrome — the auth layout already centres this on an otherwise
+  // empty page, and a box inside a box reads as clutter.
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
+    <div className="w-full">
+      <h1 className="font-display text-3xl font-semibold tracking-tight">
+        {title}
+      </h1>
+      <p className="text-muted-foreground mt-2 text-sm">{description}</p>
+      <div className="mt-8">{children}</div>
+    </div>
   );
 }

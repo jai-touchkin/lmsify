@@ -12,12 +12,15 @@
  * Out of scope: refunds, invoice download, admin payout dashboard.
  */
 /* eslint-disable react-refresh/only-export-components */
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { api } from "@/api/client";
+import { authKeys } from "@/features/auth";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 import { ENDPOINTS, ROUTES, courseDetailPath } from "@/api/endpoints";
 import {
   type CreateOrderResponse,
@@ -84,10 +87,15 @@ export function useCreateOrder() {
 /** Verify payment after Razorpay returns. */
 export function useVerifyPayment() {
   const navigate = useNavigate();
+  const qc = useQueryClient();
   return useMutation({
     mutationFn: paymentsApi.verify,
     onSuccess: (data) => {
       toast.success("Payment successful!");
+      // The server just added this course to `purchasedCourses`. Without
+      // refetching `/me` the store keeps the pre-purchase user, so the course
+      // the student just bought would still show its paywall until a reload.
+      void qc.invalidateQueries({ queryKey: authKeys.me });
       navigate(
         `${ROUTES.PAYMENT_SUCCESS}?courseId=${data.courseId}&reference=${data.reference}`,
       );
@@ -170,29 +178,35 @@ function openRazorpayCheckout(
 // CheckoutButton
 // ---------------------------------------------------------------------------
 
-import { Button } from "@/components/ui/button";
-import { IndianRupee } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
-import { Link } from "react-router-dom";
-
 export function CheckoutButton({ courseId }: { courseId: string }) {
   const { isAuthenticated } = useAuth();
   const createOrder = useCreateOrder();
 
   if (!isAuthenticated) {
+    // Carry the course path through sign-in so the student lands back here.
     const next = encodeURIComponent(courseDetailPath(courseId));
     return (
-      <Button asChild>
-        <Link to={`${ROUTES.LOGIN}?next=${next}`}>Sign in to enroll</Link>
+      <Button asChild size="lg" className="w-full">
+        <Link to={`${ROUTES.LOGIN}?next=${next}`}>Sign in to enrol</Link>
       </Button>
     );
   }
 
   return (
-    <Button onClick={() => createOrder.mutate(courseId)} disabled={createOrder.isPending}>
-      {createOrder.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-      <IndianRupee className="h-4 w-4" />
-      Buy now
+    <Button
+      size="lg"
+      className="w-full"
+      onClick={() => createOrder.mutate(courseId)}
+      disabled={createOrder.isPending}
+    >
+      {createOrder.isPending ? (
+        <>
+          <Loader2 className="size-4 animate-spin" />
+          Opening checkout…
+        </>
+      ) : (
+        "Enrol now"
+      )}
     </Button>
   );
 }

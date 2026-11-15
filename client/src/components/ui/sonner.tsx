@@ -24,9 +24,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
+          // Tailwind v4 token names — the v3-style `var(--popover)` these
+          // used to reference doesn't exist in this project, so toasts fell
+          // back to Sonner's own palette and ignored the theme entirely.
+          "--normal-bg": "var(--color-popover)",
+          "--normal-text": "var(--color-popover-foreground)",
+          "--normal-border": "var(--color-border)",
           "--border-radius": "var(--radius)",
         } as React.CSSProperties
       }

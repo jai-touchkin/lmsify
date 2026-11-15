@@ -22,6 +22,7 @@ export const ROUTES = {
   LOGIN: "/auth/login",
   REGISTER: "/auth/register",
   PROFILE: "/auth/profile",
+  LEARNING: "/learning",
   COURSES: "/courses",
   COURSE_DETAIL: "/courses/:id", // router pattern, not for <Link>
   LECTURE_PLAYER: "/courses/:id/lectures/:lectureId", // router pattern
